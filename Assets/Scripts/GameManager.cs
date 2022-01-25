@@ -19,12 +19,21 @@ public class GameManager : MonoBehaviour
             },
             new ScriptData()
             {
-                loadType =2,name="Test",dialogueContent = "222222222222222"
+                loadType =2,name="Test",dialogueContent = "222222222222222",characterPos=2
             },
-                        new ScriptData()
+            new ScriptData()
             {
-                loadType =3,name="Test",dialogueContent = "333333333333333"
+                loadType =3,name="Test",dialogueContent = "333333333333333",characterPos=1,ifRotate = true
             },
+            new ScriptData()
+            {
+                loadType =4,name="Test",dialogueContent = "4444444444444444444",characterPos=3
+            },
+            new ScriptData()
+            {
+                loadType =4,name="Test",dialogueContent = "666666666666666",characterPos=2
+            },
+
         };
         scriptIndex = 0;
         HandleDate();
@@ -54,12 +63,14 @@ public class GameManager : MonoBehaviour
             ShowCharacter(scriptDatas[scriptIndex].name);
             //更新对话框
             UpdateTalkLineText(scriptDatas[scriptIndex].dialogueContent);
+            //设置任务位置
+            SetCharacterPos(scriptDatas[scriptIndex].characterPos);
         }
     }
     //设置背景图片
     private void SetBGImageSprite(string spriteName)
     {
-
+        UIManager.Instance.SetBGImgSprite(spriteName);
     }
     public void LoadNextScript()
     {
@@ -69,16 +80,21 @@ public class GameManager : MonoBehaviour
     //显示人物
     private void ShowCharacter(string name)
     {
-
+        UIManager.Instance.ShowCharacter(name);
     }
     //更新对话框
     private void UpdateTalkLineText(string dialogueContent)
     {
+        UIManager.Instance.UpdateTalkLineText(dialogueContent);
+    }
 
+    public void SetCharacterPos(int posID)
+    {
+        UIManager.Instance.SetCharacterPos(posID);
     }
 }
 /// <summary>
-/// 剧本数据
+/// 剧本数据类
 /// </summary>
 public class ScriptData
 {
@@ -86,4 +102,6 @@ public class ScriptData
     public string name;//角色名称
     public string spriteName;//资源
     public string dialogueContent;//对话内容
+    public int characterPos;//1.左 2.右 3.中
+    public bool ifRotate;
 }
