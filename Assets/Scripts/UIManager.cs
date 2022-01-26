@@ -14,21 +14,11 @@ public class UIManager : MonoBehaviour
     public GameObject talkLineGo;//对话框父对象
     public Transform[] characterPosTrans;
 
-    private void Awake()
+    void Awake()
     {
         Instance = this;
     }
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     /// <summary>
     /// 设置背景图片
     /// </summary>
@@ -63,5 +53,13 @@ public class UIManager : MonoBehaviour
     public void SetCharacterPos(int posID,bool ifRotate = false)
     {
         imgCharacter.transform.localPosition = characterPosTrans[posID-1].localPosition;
+        if (ifRotate)
+        {
+            imgCharacter.transform.eulerAngles = new Vector3(0, 180, 0);
+        }
+        else
+        {
+            imgCharacter.transform.eulerAngles = Vector3.zero;
+        }
     }
 }

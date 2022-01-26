@@ -23,15 +23,15 @@ public class GameManager : MonoBehaviour
             },
             new ScriptData()
             {
-                loadType =3,name="Test",dialogueContent = "333333333333333",characterPos=1,ifRotate = true
+                loadType =2,name="Test",dialogueContent = "333333333333333",characterPos=1,ifRotate = true
             },
             new ScriptData()
             {
-                loadType =4,name="Test",dialogueContent = "4444444444444444444",characterPos=3
+                loadType =2,name="Test",dialogueContent = "4444444444444444444",characterPos=3
             },
             new ScriptData()
             {
-                loadType =4,name="Test",dialogueContent = "666666666666666",characterPos=2
+                loadType =2,name="Test",dialogueContent = "666666666666666",characterPos=2
             },
 
         };
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
             //更新对话框
             UpdateTalkLineText(scriptDatas[scriptIndex].dialogueContent);
             //设置任务位置
-            SetCharacterPos(scriptDatas[scriptIndex].characterPos);
+            SetCharacterPos(scriptDatas[scriptIndex].characterPos,scriptDatas[scriptIndex].ifRotate);
         }
     }
     //设置背景图片
@@ -88,9 +88,9 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateTalkLineText(dialogueContent);
     }
 
-    public void SetCharacterPos(int posID)
+    public void SetCharacterPos(int posID, bool ifRotate = false)
     {
-        UIManager.Instance.SetCharacterPos(posID);
+        UIManager.Instance.SetCharacterPos(posID,ifRotate);
     }
 }
 /// <summary>
