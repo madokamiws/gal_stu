@@ -13,7 +13,8 @@ public class UIManager : MonoBehaviour
     public Text textTalkline;
     public GameObject talkLineGo;//对话框父对象
     public Transform[] characterPosTrans;
-
+    public Text textEnergyValue;
+    public Text textFavorValue;
     void Awake()
     {
         Instance = this;
@@ -61,5 +62,20 @@ public class UIManager : MonoBehaviour
         {
             imgCharacter.transform.eulerAngles = Vector3.zero;
         }
+    }
+    /// <summary>
+    /// 更新精力值ui
+    /// </summary>
+    public void UpdateEnergyValue(int value = 0)
+    {
+        textEnergyValue.text = value.ToString();
+    }
+    /// <summary>
+    /// 更新好感度值ui
+    /// </summary>
+    /// <param name="value"></param>
+    public void UpdateFavourValue(int value = 0, string name = null)
+    {
+        textFavorValue.text = value.ToString();
     }
 }

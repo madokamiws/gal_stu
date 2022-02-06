@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 284f2e8bdf81b1d438e3b3b4d053e7a8
+guid: 131073f26f417a4459aa1185d3efb31e
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -45,7 +45,7 @@ TextureImporter:
     mipBias: -100
     wrapU: 1
     wrapV: 1
-    wrapW: 1
+    wrapW: -1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -93,6 +93,18 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -116,8 +128,8 @@ TextureImporter:
         width: 331
         height: 82
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 44, y: 25, z: 41, w: 31}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -137,8 +149,8 @@ TextureImporter:
         width: 333
         height: 281
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 71, y: 32, z: 70, w: 33}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 69, y: 31, z: 69, w: 30}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -158,8 +170,8 @@ TextureImporter:
         width: 690
         height: 212
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 129, y: 11, z: 11, w: 85}
       outline: []
       physicsShape: []
       tessellationDetail: 0

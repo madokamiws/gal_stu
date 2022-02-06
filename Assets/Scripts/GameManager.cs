@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public List<ScriptData> scriptDatas;
     private int scriptIndex;
+    private int energyValue;//目前角色的精力值
+    public Dictionary<string, int> favorabilityDict;// 其他角色对玩家的好感度
 
     private void Awake()
     {
@@ -15,28 +17,34 @@ public class GameManager : MonoBehaviour
         {
             new ScriptData()
             {
-                 loadType =1,spriteName ="Title"
+                 loadType =1,spriteName ="Title",soundType=3,soundPath = "Daily"
             },
             new ScriptData()
             {
-                loadType =2,name="Test",dialogueContent = "222222222222222",characterPos=2
+                loadType =2,name="Test",dialogueContent = "222222222222222",characterPos=2,soundType=1,soundPath = "0",energyValue = 50
             },
             new ScriptData()
             {
-                loadType =2,name="Test",dialogueContent = "333333333333333",characterPos=1,ifRotate = true
+                loadType =2,name="Test",dialogueContent = "333333333333333",characterPos=1,ifRotate = true,soundType=1,soundPath = "1",favorability=5
             },
             new ScriptData()
             {
-                loadType =2,name="Test",dialogueContent = "4444444444444444444",characterPos=3
+                loadType =2,name="Test",dialogueContent = "4444444444444444444",characterPos=3,soundType=1,soundPath = "2"
             },
             new ScriptData()
             {
-                loadType =2,name="Test",dialogueContent = "666666666666666",characterPos=2
+                loadType =2,name="Test",dialogueContent = "666666666666666",characterPos=2,soundType=1,soundPath = "3",energyValue=-5
             },
 
         };
         scriptIndex = 0;
         HandleDate();
+        energyValue = 50;
+        favorabilityDict = new Dictionary<string, int>()
+        {
+            {"Player",0},
+            {"Test",80},
+        };
     }
     /// <summary>
     /// 处理每一条剧情数据
@@ -48,23 +56,20 @@ public class GameManager : MonoBehaviour
             Debug.Log("游戏结束");
             return;
         }
+
+        PLaySound(scriptDatas[scriptIndex].soundType);
         if (scriptDatas[scriptIndex].loadType == 1)
         {
             //设置背景图片
             SetBGImageSprite(scriptDatas[scriptIndex].spriteName);
-            // 加载吓一跳剧情数据
+            // 加载下一跳剧情数据
             LoadNextScript();
 
         }
         else
         {
             //人物
-            //显示人物
-            ShowCharacter(scriptDatas[scriptIndex].name);
-            //更新对话框
-            UpdateTalkLineText(scriptDatas[scriptIndex].dialogueContent);
-            //设置任务位置
-            SetCharacterPos(scriptDatas[scriptIndex].characterPos,scriptDatas[scriptIndex].ifRotate);
+            HandleCharacter();
         }
     }
     //设置背景图片
@@ -92,16 +97,105 @@ public class GameManager : MonoBehaviour
     {
         UIManager.Instance.SetCharacterPos(posID,ifRotate);
     }
-}
-/// <summary>
-/// 剧本数据类
-/// </summary>
-public class ScriptData
-{
-    public int loadType;//载入资源类型 1.背景 2.人
-    public string name;//角色名称
-    public string spriteName;//资源
-    public string dialogueContent;//对话内容
-    public int characterPos;//1.左 2.右 3.中
-    public bool ifRotate;
+    public void PLaySound(int soundType)
+    {
+        switch (soundType)
+        {
+            case 1:
+                AudioSouceManager.Instance.PlayDialogue(
+                    scriptDatas[scriptIndex].name+"/"+scriptDatas[scriptIndex].soundPath
+                    );
+                break;
+            case 2:
+                AudioSouceManager.Instance.PlaySound(
+                     scriptDatas[scriptIndex].soundPath
+                    );
+                break;
+            case 3:
+                AudioSouceManager.Instance.PlayMusic(
+                     scriptDatas[scriptIndex].soundPath
+                    );
+                break;
+        }
+
+    }
+    /// <summary>
+    /// 改变精力值
+    /// </summary>
+    /// <param name="value">需要具体改变的值</param>
+    public void ChangeEnergyValue(int value = 0)
+    {
+        if (value == 0)
+        {
+            return;
+        }
+        if (value > 0)
+        {
+            AudioSouceManager.Instance.PlaySound("Energy");
+        }
+        energyValue += value;
+        if (energyValue >= 100)
+        {
+            energyValue = 100;
+        }
+        else if (energyValue <= 0)
+        {
+            energyValue = 0;
+        }
+        UpdateEnergyValue(energyValue);
+    }
+    /// <summary>
+    /// 更新精力值ui
+    /// </summary>
+    public void UpdateEnergyValue(int value =0)
+    {
+        UIManager.Instance.UpdateEnergyValue(value);
+    }
+
+    /// <summary>
+    /// 改变好感度
+    /// </summary>
+    /// <param name="value"></param>
+    public void ChangeFavourValue(int value = 0,string name = null)
+    {
+        if (value == 0)
+        {
+            return;
+        }
+        if (value > 0)
+        {
+            AudioSouceManager.Instance.PlaySound("Favor");
+        }
+        favorabilityDict[name] += value;
+        if (favorabilityDict[name] >= 100)
+        {
+            favorabilityDict[name] = 100;
+        }
+        else if (favorabilityDict[name] <= 0)
+        {
+            favorabilityDict[name] = 0;
+        }
+        UpdateFavourValue(favorabilityDict[name],name);
+    }
+    /// <summary>
+    /// 更新好感度ui
+    /// </summary>
+    public void UpdateFavourValue(int value = 0, string name = null)
+    {
+        UIManager.Instance.UpdateFavourValue(value,name);
+    }
+    /// <summary>
+    /// 处理人物相关内容
+    /// </summary>
+    public void HandleCharacter()
+    {
+        //显示人物
+        ShowCharacter(scriptDatas[scriptIndex].name);
+        //更新对话框
+        UpdateTalkLineText(scriptDatas[scriptIndex].dialogueContent);
+        //设置任务位置
+        SetCharacterPos(scriptDatas[scriptIndex].characterPos, scriptDatas[scriptIndex].ifRotate);
+        ChangeEnergyValue(scriptDatas[scriptIndex].energyValue);
+        ChangeFavourValue(scriptDatas[scriptIndex].favorability, scriptDatas[scriptIndex].name);
+    }
 }
