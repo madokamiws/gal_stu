@@ -17,4 +17,5 @@ public class ScriptData
     public string soundPath;//音频路径
     public int favorability;//好感度（改变值）
     public int energyValue;//精力值（改变值）
+    public int characterID;//三人对话时的人物id
 }

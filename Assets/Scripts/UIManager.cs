@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
 
     public Image imgBG;
     public Image imgCharacter;
+    public Image imgCharacter2;
     public Text textName;
     public Text textTalkline;
     public GameObject talkLineGo;//对话框父对象
@@ -32,12 +33,23 @@ public class UIManager : MonoBehaviour
     /// 显示人物
     /// </summary>
     /// <param name="name"></param>
-    public void ShowCharacter(string name)
+    public void ShowCharacter(string name,int characterID=0)
     {
         talkLineGo.SetActive(true);
-        imgCharacter.sprite = Resources.Load<Sprite>("Sprites/Characters/" + name);
-        imgCharacter.gameObject.SetActive(true);
+
         textName.text = name;
+        if (characterID == 0)
+        {
+            imgCharacter.sprite = Resources.Load<Sprite>("Sprites/Characters/" + name);
+            imgCharacter.SetNativeSize();
+            imgCharacter.gameObject.SetActive(true);
+        }
+        else
+        {
+            imgCharacter2.sprite = Resources.Load<Sprite>("Sprites/Characters/" + name);
+            imgCharacter2.SetNativeSize();
+            imgCharacter2.gameObject.SetActive(true);
+        }
     }
     /// <summary>
     /// 更新对话内容
@@ -48,19 +60,32 @@ public class UIManager : MonoBehaviour
         textTalkline.text = dialogueContent;
     }
     /// <summary>
-    /// 
+    /// 设置人物位置
     /// </summary>
     /// <param name="posID"></param>
-    public void SetCharacterPos(int posID,bool ifRotate = false)
+    public void SetCharacterPos(int posID,bool ifRotate = false,int characterID=0)
     {
-        imgCharacter.transform.localPosition = characterPosTrans[posID-1].localPosition;
-        if (ifRotate)
+        if (characterID == 0)
         {
-            imgCharacter.transform.eulerAngles = new Vector3(0, 180, 0);
+            setPos(posID, imgCharacter, ifRotate);
         }
         else
         {
-            imgCharacter.transform.eulerAngles = Vector3.zero;
+            setPos(posID, imgCharacter2, ifRotate);
+        }
+
+    }
+
+    public void setPos(int posID, Image targetImage,bool ifRotate = false )
+    {
+        targetImage.transform.localPosition = characterPosTrans[posID - 1].localPosition;
+        if (ifRotate)
+        {
+            targetImage.transform.eulerAngles = new Vector3(0, 180, 0);
+        }
+        else
+        {
+            targetImage.transform.eulerAngles = Vector3.zero;
         }
     }
     /// <summary>

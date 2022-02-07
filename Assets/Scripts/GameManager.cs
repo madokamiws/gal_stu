@@ -35,6 +35,15 @@ public class GameManager : MonoBehaviour
             {
                 loadType =2,name="Test",dialogueContent = "666666666666666",characterPos=2,soundType=1,soundPath = "3",energyValue=-5
             },
+            new ScriptData()
+            {
+                 loadType =1,spriteName ="Title",soundType=3,soundPath = "Normal"
+            },
+            new ScriptData()
+            {
+                loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "0",ifRotate=true,characterID=1, 
+                dialogueContent = "你好，我是debug",
+            },
 
         };
         scriptIndex = 0;
@@ -66,10 +75,14 @@ public class GameManager : MonoBehaviour
             LoadNextScript();
 
         }
-        else
+        else if (scriptDatas[scriptIndex].loadType == 2)
         {
             //人物
             HandleCharacter();
+        }
+        else
+        {
+            LoadNextScript();
         }
     }
     //设置背景图片
@@ -83,9 +96,9 @@ public class GameManager : MonoBehaviour
         HandleDate();
     }
     //显示人物
-    private void ShowCharacter(string name)
+    private void ShowCharacter(string name,int characterID=0)
     {
-        UIManager.Instance.ShowCharacter(name);
+        UIManager.Instance.ShowCharacter(name, characterID);
     }
     //更新对话框
     private void UpdateTalkLineText(string dialogueContent)
@@ -93,9 +106,9 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateTalkLineText(dialogueContent);
     }
 
-    public void SetCharacterPos(int posID, bool ifRotate = false)
+    public void SetCharacterPos(int posID, bool ifRotate = false,int characterID=0)
     {
-        UIManager.Instance.SetCharacterPos(posID,ifRotate);
+        UIManager.Instance.SetCharacterPos(posID,ifRotate,characterID);
     }
     public void PLaySound(int soundType)
     {
@@ -190,11 +203,11 @@ public class GameManager : MonoBehaviour
     public void HandleCharacter()
     {
         //显示人物
-        ShowCharacter(scriptDatas[scriptIndex].name);
+        ShowCharacter(scriptDatas[scriptIndex].name, scriptDatas[scriptIndex].characterID);
         //更新对话框
         UpdateTalkLineText(scriptDatas[scriptIndex].dialogueContent);
-        //设置任务位置
-        SetCharacterPos(scriptDatas[scriptIndex].characterPos, scriptDatas[scriptIndex].ifRotate);
+        //设置人物位置
+        SetCharacterPos(scriptDatas[scriptIndex].characterPos, scriptDatas[scriptIndex].ifRotate, scriptDatas[scriptIndex].characterID);
         ChangeEnergyValue(scriptDatas[scriptIndex].energyValue);
         ChangeFavourValue(scriptDatas[scriptIndex].favorability, scriptDatas[scriptIndex].name);
     }

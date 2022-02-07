@@ -32,8 +32,8 @@ public class AudioSouceManager : MonoBehaviour
     public void PlayMusic(string musicPath, bool loop = true)
     {
         musicAudio.loop = loop;
-        //musicAudio.clip = Resources.Load<AudioClip>("AudioClips/Music/" + musicPath);
-        //musicAudio.Play();
+        musicAudio.clip = Resources.Load<AudioClip>("AudioClips/Music/" + musicPath);
+        musicAudio.Play();
     }
     public void StopMusic()
     {
