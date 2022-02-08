@@ -11,6 +11,17 @@ public class AudioSouceManager : MonoBehaviour
     public AudioSource musicAudio;
     public AudioSource dialogueAudio;
 
+    public static AudioSouceManager Get
+    {
+        get
+        {
+            if (!Instance)
+            {
+                Instance = new AudioSouceManager();
+            }
+            return Instance;
+        }
+    }
     private void Awake()
     {
         Instance = this;  

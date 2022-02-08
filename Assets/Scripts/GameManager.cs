@@ -9,7 +9,17 @@ public class GameManager : MonoBehaviour
     private int scriptIndex;
     private int energyValue;//目前角色的精力值
     public Dictionary<string, int> favorabilityDict;// 其他角色对玩家的好感度
-
+    public static GameManager Get
+    {
+        get
+        {
+            if (!Instance)
+            {
+                Instance = new GameManager();
+            }
+            return Instance;
+        }
+    }
     private void Awake()
     {
         Instance = this;
@@ -41,19 +51,74 @@ public class GameManager : MonoBehaviour
             },
             new ScriptData()
             {
-                loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "0",ifRotate=true,characterID=1, 
+                loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "0",ifRotate=true,characterID=1,
                 dialogueContent = "你好，我是debug",
+            },
+            new ScriptData()
+            {
+                loadType =2,name="Test",characterPos=2,soundType=1,soundPath = "6",
+                dialogueContent = "你好，我是debug",
+            },
+            new ScriptData()
+            {
+                loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "1",ifRotate=true,characterID=1,
+                dialogueContent = "基建",energyValue=-50
+            },
+            new ScriptData()
+            {
+                loadType =3,eventID=1,eventData=3,scriptID=1
+            },
+            new ScriptData()
+            {
+                loadType =3,eventID=2,eventData=2,dialogueContent = "选项一剧情",
+            },
+            new ScriptData()
+            {
+                loadType =3,eventID=2,eventData=3,dialogueContent = "选项二剧情",
+            },
+            new ScriptData()
+            {
+                loadType =3,eventID=2,eventData=4,dialogueContent = "选项三剧情",
+            },
+            new ScriptData()
+            {
+                loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "2",ifRotate=true,characterID=1,
+                dialogueContent = "一选项触发的事件",scriptID=2,
+            },
+            new ScriptData()
+            {
+                loadType =3,eventID=2,eventData=1,
+            },
+            new ScriptData()
+            {
+                loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "3",ifRotate=true,characterID=1,
+                dialogueContent = "二选项触发的事件",scriptID=3,
+            },
+            new ScriptData()
+            {
+                loadType =3,eventID=2,eventData=1,
+            },
+            new ScriptData()
+            {
+                loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "4",ifRotate=true,characterID=1,
+                dialogueContent = "三选项触发继续剧情",scriptID=4,
             },
 
         };
         scriptIndex = 0;
         HandleDate();
-        energyValue = 50;
+        energyValue = 100;
+        ChangeEnergyValue();
         favorabilityDict = new Dictionary<string, int>()
         {
             {"Player",0},
             {"Test",80},
+            {"Debug",10}
         };
+        for (int i = 0; i < scriptDatas.Count; i++)
+        {
+            scriptDatas[i].scriptIndex = i;
+        }
     }
     /// <summary>
     /// 处理每一条剧情数据
@@ -80,6 +145,26 @@ public class GameManager : MonoBehaviour
             //人物
             HandleCharacter();
         }
+        else if (scriptDatas[scriptIndex].loadType == 3)
+        {
+            //事件
+            switch (scriptDatas[scriptIndex].eventID)
+            {
+                //显示选择项
+                case 1:
+                    ShowChoiceUI(scriptDatas[scriptIndex].eventData, GetChoiceContent(scriptDatas[scriptIndex].eventData));
+                    break;
+                //跳转到标记剧本
+                case 2:
+                    SetScriptIndex();
+                    break;
+                case 3:
+
+
+                default:
+                    break;
+            }
+        }
         else
         {
             LoadNextScript();
@@ -88,7 +173,7 @@ public class GameManager : MonoBehaviour
     //设置背景图片
     private void SetBGImageSprite(string spriteName)
     {
-        UIManager.Instance.SetBGImgSprite(spriteName);
+        UIManager.Get.SetBGImgSprite(spriteName);
     }
     public void LoadNextScript()
     {
@@ -96,9 +181,9 @@ public class GameManager : MonoBehaviour
         HandleDate();
     }
     //显示人物
-    private void ShowCharacter(string name,int characterID=0)
+    private void ShowCharacter(string name, int characterID = 0)
     {
-        UIManager.Instance.ShowCharacter(name, characterID);
+        UIManager.Get.ShowCharacter(name, characterID);
     }
     //更新对话框
     private void UpdateTalkLineText(string dialogueContent)
@@ -106,17 +191,21 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateTalkLineText(dialogueContent);
     }
 
-    public void SetCharacterPos(int posID, bool ifRotate = false,int characterID=0)
+    public void SetCharacterPos(int posID, bool ifRotate = false, int characterID = 0)
     {
-        UIManager.Instance.SetCharacterPos(posID,ifRotate,characterID);
+        UIManager.Instance.SetCharacterPos(posID, ifRotate, characterID);
     }
+    /// <summary>
+    /// 播放音效
+    /// </summary>
+    /// <param name="soundType"></param>
     public void PLaySound(int soundType)
     {
         switch (soundType)
         {
             case 1:
                 AudioSouceManager.Instance.PlayDialogue(
-                    scriptDatas[scriptIndex].name+"/"+scriptDatas[scriptIndex].soundPath
+                    scriptDatas[scriptIndex].name + "/" + scriptDatas[scriptIndex].soundPath
                     );
                 break;
             case 2:
@@ -140,6 +229,7 @@ public class GameManager : MonoBehaviour
     {
         if (value == 0)
         {
+            UpdateEnergyValue(energyValue);
             return;
         }
         if (value > 0)
@@ -160,7 +250,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 更新精力值ui
     /// </summary>
-    public void UpdateEnergyValue(int value =0)
+    public void UpdateEnergyValue(int value = 0)
     {
         UIManager.Instance.UpdateEnergyValue(value);
     }
@@ -169,7 +259,7 @@ public class GameManager : MonoBehaviour
     /// 改变好感度
     /// </summary>
     /// <param name="value"></param>
-    public void ChangeFavourValue(int value = 0,string name = null)
+    public void ChangeFavourValue(int value = 0, string name = null)
     {
         if (value == 0)
         {
@@ -188,14 +278,14 @@ public class GameManager : MonoBehaviour
         {
             favorabilityDict[name] = 0;
         }
-        UpdateFavourValue(favorabilityDict[name],name);
+        UpdateFavourValue(favorabilityDict[name], name);
     }
     /// <summary>
     /// 更新好感度ui
     /// </summary>
     public void UpdateFavourValue(int value = 0, string name = null)
     {
-        UIManager.Instance.UpdateFavourValue(value,name);
+        UIManager.Instance.UpdateFavourValue(value, name);
     }
     /// <summary>
     /// 处理人物相关内容
@@ -210,5 +300,43 @@ public class GameManager : MonoBehaviour
         SetCharacterPos(scriptDatas[scriptIndex].characterPos, scriptDatas[scriptIndex].ifRotate, scriptDatas[scriptIndex].characterID);
         ChangeEnergyValue(scriptDatas[scriptIndex].energyValue);
         ChangeFavourValue(scriptDatas[scriptIndex].favorability, scriptDatas[scriptIndex].name);
+    }
+    /// <summary>
+    /// 显示多选项对话框
+    /// </summary>
+    /// <param name="choiceNum"></param>
+    /// <param name="choiceContent"></param>
+    public void ShowChoiceUI(int choiceNum, string[] choiceContent)
+    {
+        UIManager.Get.ShowChoiceUI(choiceNum, choiceContent);
+    }
+    /// <summary>
+    /// 获取当前选择项的文本
+    /// </summary>
+    /// <param name="num"></param>
+    /// <returns></returns>
+    public string[] GetChoiceContent(int num)
+    {
+        string[] choiceContent = new string[num];
+        for (int i = 0; i < num; i++)
+        {
+            choiceContent[i] = scriptDatas[scriptIndex + i + 1].dialogueContent;
+        }
+        return choiceContent;
+    }
+    /// <summary>
+    /// 设置剧本索引
+    /// </summary>
+    public void SetScriptIndex(int index = 0)
+    {
+        for (int i = 0; i < scriptDatas.Count; i++)
+        {
+            if (scriptDatas[scriptIndex+index].eventData == scriptDatas[i].scriptID)
+            {
+                scriptIndex = scriptDatas[i].scriptIndex;
+                break;
+            }
+        }
+        HandleDate();
     }
 }

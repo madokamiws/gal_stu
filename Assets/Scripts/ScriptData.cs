@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class ScriptData
 {
-    public int loadType;//载入资源类型 1.背景 2.人
+    public int loadType;//载入资源类型 1.背景 2.人 3.事件
     public string name;//角色名称
     public string spriteName;//资源
     public string dialogueContent;//对话内容
@@ -18,4 +18,12 @@ public class ScriptData
     public int favorability;//好感度（改变值）
     public int energyValue;//精力值（改变值）
     public int characterID;//三人对话时的人物id
+    //处理事件id
+    public int eventID;//1.显示选择项 2 跳转到指定剧本位置 3.特殊事件
+    //事件选项数据：
+    //1  几个选择项  2  具体要跳转到的标记位 3.事件ID
+    public int eventData;
+    //剧本用于标记位，用于跳转
+    public int scriptID;
+    public int scriptIndex;//剧本索引
 }

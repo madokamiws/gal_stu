@@ -16,6 +16,21 @@ public class UIManager : MonoBehaviour
     public Transform[] characterPosTrans;
     public Text textEnergyValue;
     public Text textFavorValue;
+    public GameObject empChoiceUIGo;//多项选择框父对象
+    public GameObject[] choiceUIGos;
+    public Text[] textChoiceUIs;
+
+    public static UIManager Get
+    {
+        get
+        {
+            if (!Instance)
+            {
+                Instance = new UIManager();
+            }
+            return Instance;
+        }
+    }
     void Awake()
     {
         Instance = this;
@@ -35,8 +50,8 @@ public class UIManager : MonoBehaviour
     /// <param name="name"></param>
     public void ShowCharacter(string name,int characterID=0)
     {
-        talkLineGo.SetActive(true);
-
+        ShowORHideTalkLine(true);
+        CloseChoiceUI();
         textName.text = name;
         if (characterID == 0)
         {
@@ -103,4 +118,39 @@ public class UIManager : MonoBehaviour
     {
         textFavorValue.text = value.ToString();
     }
+    /// <summary>
+    /// 显示选择对话框
+    /// </summary>
+    /// <param name="choiceNum">几个选项</param>
+    /// <param name="choiceContent">文本</param>
+    public void ShowChoiceUI(int choiceNum,string[] choiceContent)
+    {
+        empChoiceUIGo.SetActive(true);
+        ShowORHideTalkLine(false);
+        for (int i = 0; i < choiceUIGos.Length; i++)
+        {
+            choiceUIGos[i].SetActive(false);
+        }
+        for (int i = 0; i < choiceNum; i++)
+        {
+            choiceUIGos[i].SetActive(true);
+            textChoiceUIs[i].text = choiceContent[i];
+        }
+    }
+    public void CloseChoiceUI()
+    {
+        empChoiceUIGo.SetActive(false);
+    }
+
+    /// <summary>
+    /// 显示活隐藏对话框
+    /// </summary>
+    /// <param name="show"></param>
+    public void ShowORHideTalkLine(bool show = true)
+    {
+        talkLineGo.SetActive(show);
+
+
+    }
+
 }
