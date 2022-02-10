@@ -19,9 +19,9 @@ public class ScriptData
     public int energyValue;//精力值（改变值）
     public int characterID;//三人对话时的人物id
     //处理事件id
-    public int eventID;//1.显示选择项 2 跳转到指定剧本位置 3.特殊事件
+    public int eventID;//1.显示选择项 2 跳转到指定剧本位置 3.显示隐藏遮罩 4.特殊事件
     //事件选项数据：
-    //1  几个选择项  2  具体要跳转到的标记位 3.事件ID
+    //1  eventID为1时代表几个选择项  2  eventID为2时代表具体要跳转到的标记位 3.0隐藏1显示遮罩 4.eventID为3时代表事件ID
     public int eventData;
     //剧本用于标记位，用于跳转
     public int scriptID;

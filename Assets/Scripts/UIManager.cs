@@ -19,6 +19,9 @@ public class UIManager : MonoBehaviour
     public GameObject empChoiceUIGo;//多项选择框父对象
     public GameObject[] choiceUIGos;
     public Text[] textChoiceUIs;
+    public bool toNextScene;//是否开始遮罩动画
+    public bool showMask;//显示或隐藏遮罩
+    public Image mask;//全屏遮罩
 
     public static UIManager Get
     {
@@ -151,6 +154,49 @@ public class UIManager : MonoBehaviour
         talkLineGo.SetActive(show);
 
 
+    }
+    /// <summary>
+    /// 显示或隐藏遮罩
+    /// </summary>
+    /// <param name="show">true显示</param>
+    public void ShowOrHideMask(bool show)
+    {
+        toNextScene = true;
+        showMask = show;
+    }
+    public void ShowMask()
+    {
+        mask.color += new Color(0, 0, 0,Mathf.Lerp(0, 1, 0.5f) * Time.deltaTime);
+        if (mask.color.a >= 0.9f)
+        {
+            mask.color = new Color(0, 0, 0, 1);
+            toNextScene = false;
+            GameManager.Get.LoadNextScript();
+        }
+    }
+    public void Hidemask()
+    {
+        mask.color -= new Color(0,0,0,Mathf.Lerp(1, 0, 0.5f) * Time.deltaTime);
+        if (mask.color.a <= 0.1f)
+        {
+            mask.color = new Color(0,0,0, 0);
+            toNextScene = false;
+            GameManager.Get.LoadNextScript();
+        }
+    }
+    private void Update()
+    {
+        if (toNextScene)
+        {
+            if (showMask)
+            {
+                ShowMask();
+            }
+            else
+            {
+                Hidemask();
+            }
+        }
     }
 
 }

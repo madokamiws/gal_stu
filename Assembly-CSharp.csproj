@@ -66,6 +66,8 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\AudioSouceManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\HitpointGame.cs" />
+    <Compile Include="Assets\Scripts\Points.cs" />
     <Compile Include="Assets\Scripts\ScriptData.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
     <Reference Include="UnityEngine">

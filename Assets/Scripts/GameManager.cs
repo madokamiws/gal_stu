@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class GameManager : MonoBehaviour
     private int scriptIndex;
     private int energyValue;//目前角色的精力值
     public Dictionary<string, int> favorabilityDict;// 其他角色对玩家的好感度
+    public Dictionary<int, Action<object>> eventDict;
+    public GameObject hitPointGo;
     public static GameManager Get
     {
         get
@@ -28,6 +31,10 @@ public class GameManager : MonoBehaviour
             new ScriptData()
             {
                  loadType =1,spriteName ="Title",soundType=3,soundPath = "Daily"
+            },
+            new ScriptData()
+            {
+                loadType =3,eventID=3
             },
             new ScriptData()
             {
@@ -101,7 +108,46 @@ public class GameManager : MonoBehaviour
             new ScriptData()
             {
                 loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "4",ifRotate=true,characterID=1,
-                dialogueContent = "三选项触发继续剧情",scriptID=4,
+                dialogueContent = "那么我们要开始了",scriptID=4,
+            },
+            new ScriptData()
+            {
+                loadType =3,eventID=4,eventData=1,
+            },
+            new ScriptData()//失败时需要跳转的事件剧情位置
+            {
+                loadType =3,eventID=2,eventData=5,
+            },
+            new ScriptData()//胜利时需要跳转的事件剧情位置
+            {
+                loadType =3,eventID=2,eventData=6,
+            },
+            new ScriptData()
+            {
+                loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "5",ifRotate=true,characterID=1,
+                dialogueContent = "游戏失败",scriptID=5,
+            },
+            new ScriptData()
+            {
+                loadType =3,eventID=2,eventData=7,
+            },
+            new ScriptData()
+            {
+                loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "6",ifRotate=true,characterID=1,
+                dialogueContent = "游戏成功",scriptID=6,
+            },
+            new ScriptData()
+            {
+                loadType =3,eventID=2,eventData=7,
+            },
+            new ScriptData()
+            {
+                loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "7",ifRotate=true,characterID=1,
+                dialogueContent = "在下告退",scriptID=7,
+            },
+            new ScriptData()
+            {
+                loadType =3,eventID=3,eventData=1,
             },
 
         };
@@ -114,6 +160,10 @@ public class GameManager : MonoBehaviour
             {"Player",0},
             {"Test",80},
             {"Debug",10}
+        };
+        eventDict = new Dictionary<int, Action<object>>()
+        {
+            { 1,StartHitPointEvent}
         };
         for (int i = 0; i < scriptDatas.Count; i++)
         {
@@ -159,6 +209,11 @@ public class GameManager : MonoBehaviour
                     SetScriptIndex();
                     break;
                 case 3:
+                    ShowOrHideMask(System.Convert.ToBoolean(scriptDatas[scriptIndex].eventData));
+                    break;
+                case 4:
+                    eventDict[scriptDatas[scriptIndex].eventData](null);
+                    break;
 
 
                 default:
@@ -175,9 +230,9 @@ public class GameManager : MonoBehaviour
     {
         UIManager.Get.SetBGImgSprite(spriteName);
     }
-    public void LoadNextScript()
+    public void LoadNextScript(int addNum =1 )
     {
-        scriptIndex++;
+        scriptIndex+=addNum;
         HandleDate();
     }
     //显示人物
@@ -338,5 +393,22 @@ public class GameManager : MonoBehaviour
             }
         }
         HandleDate();
+    }
+    /// <summary>
+    /// 点击玩法
+    /// </summary>
+    /// <param name="src"></param>
+    public void StartHitPointEvent(object src)
+    {
+        UIManager.Get.ShowORHideTalkLine(false);
+        hitPointGo.SetActive(true);
+    }
+    /// <summary>
+    /// 显示或隐藏遮罩
+    /// </summary>
+    /// <param name="show">true显示</param>
+    public void ShowOrHideMask(bool show)
+    {
+        UIManager.Get.ShowOrHideMask(show);
     }
 }
