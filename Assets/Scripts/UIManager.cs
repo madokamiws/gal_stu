@@ -20,9 +20,10 @@ public class UIManager : MonoBehaviour
     public GameObject[] choiceUIGos;
     public Text[] textChoiceUIs;
     public bool toNextScene;//是否开始遮罩动画
-    public bool showMask;//显示或隐藏遮罩
+    //public bool showMask;//显示或隐藏遮罩
     public Image mask;//全屏遮罩
-
+    //private Image imageTween;//需要做ui动画遮罩的图片对象
+    private List<UIInfo> imageTweenList;//需要做ui动画遮罩的图片对象
     public static UIManager Get
     {
         get
@@ -37,6 +38,7 @@ public class UIManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        imageTweenList = new List<UIInfo>();
     }
 
     /// <summary>
@@ -53,9 +55,10 @@ public class UIManager : MonoBehaviour
     /// <param name="name"></param>
     public void ShowCharacter(string name,int characterID=0)
     {
-        ShowORHideTalkLine(true);
+
         CloseChoiceUI();
         textName.text = name;
+        ShowORHideTalkLine(false);
         if (characterID == 0)
         {
             imgCharacter.sprite = Resources.Load<Sprite>("Sprites/Characters/" + name);
@@ -75,6 +78,7 @@ public class UIManager : MonoBehaviour
     /// <param name="dialogueContent"></param>
     public void UpdateTalkLineText(string dialogueContent)
     {
+        ShowORHideTalkLine(true);
         textTalkline.text = dialogueContent;
     }
     /// <summary>
@@ -161,42 +165,117 @@ public class UIManager : MonoBehaviour
     /// <param name="show">true显示</param>
     public void ShowOrHideMask(bool show)
     {
-        toNextScene = true;
-        showMask = show;
+        DoShowOrHideUITween(show, true,5,mask);
+
     }
-    public void ShowMask()
+    /// <summary>
+    /// 人物渐隐渐现的动画
+    /// </summary>
+    /// <param name="show"></param>
+    /// <param name="characterID"></param>
+    public void ShowOrHideCharacterMask(bool show,int characterID)
     {
-        mask.color += new Color(0, 0, 0,Mathf.Lerp(0, 1, 0.5f) * Time.deltaTime);
-        if (mask.color.a >= 0.9f)
+        if (characterID == 0)
         {
-            mask.color = new Color(0, 0, 0, 1);
-            toNextScene = false;
-            GameManager.Get.LoadNextScript();
+            DoShowOrHideUITween(show, true,1.5f,imgCharacter);
+        }
+        if (characterID == 1)
+        {
+            DoShowOrHideUITween(show, true,1.5f,imgCharacter2);
+        }
+
+    }
+
+    /// <summary>
+    /// 执行ui渐隐渐现的动画
+    /// </summary>
+    /// <param name="show"></param>
+    /// <param name="ifLoadNext"></param>
+    /// <param name="interval"></param>动画时间间隔
+    /// <param name="image"></param>
+    public void DoShowOrHideUITween(bool show, bool ifLoadNext,float interval, params Image[] image)
+    {
+        toNextScene = true;
+        float percent;
+        if (show)
+        {
+            percent = 0;
+        }
+        else
+        {
+            percent = 1;
+        } 
+        for (int i = 0; i < image.Length; i++)
+        {
+            imageTweenList.Add(new UIInfo() { show = show, imageTween = image[i], ifLoadNext = ifLoadNext,lerSpeed=1/ interval,percent = percent });
+        }
+       
+    }
+    public void ShowUi(UIInfo info)
+    {
+        info.percent += info.lerSpeed * Time.deltaTime;
+        info.imageTween.color = new Color(info.imageTween.color.r, info.imageTween.color.g, info.imageTween.color.b,
+            info.percent);
+        if (info.imageTween.color.a >= 0.95f)
+        {
+            info.imageTween.color = new Color(info.imageTween.color.r, info.imageTween.color.g, info.imageTween.color.b, 1);
+            if (info.ifLoadNext)
+            {
+                GameManager.Get.LoadNextScript();
+            }
+            imageTweenList.Remove(info);
+            if (imageTweenList.Count <= 0)
+            {
+                toNextScene = false;
+            }
+
         }
     }
-    public void Hidemask()
+    public void HideUi(UIInfo info)
     {
-        mask.color -= new Color(0,0,0,Mathf.Lerp(1, 0, 0.5f) * Time.deltaTime);
-        if (mask.color.a <= 0.1f)
+        info.percent -= info.lerSpeed * Time.deltaTime;
+        info.imageTween.color = new Color(info.imageTween.color.r, info.imageTween.color.g, info.imageTween.color.b,
+            info.percent);
+        if (info.imageTween.color.a <= 0.05f)
         {
-            mask.color = new Color(0,0,0, 0);
-            toNextScene = false;
-            GameManager.Get.LoadNextScript();
+            info.imageTween.color = new Color(info.imageTween.color.r, info.imageTween.color.g, info.imageTween.color.b, 0);
+
+            if (info.ifLoadNext)
+            {
+                GameManager.Get.LoadNextScript();
+            }
+            imageTweenList.Remove(info);
+            if (imageTweenList.Count<=0)
+            {
+                toNextScene = false;
+            }
         }
     }
     private void Update()
     {
         if (toNextScene)
         {
-            if (showMask)
+            for (int i = 0; i < imageTweenList.Count; i++)
             {
-                ShowMask();
-            }
-            else
-            {
-                Hidemask();
+                if (imageTweenList[i].show)
+                {
+                    ShowUi(imageTweenList[i]);
+                }
+                else
+                {
+                    HideUi(imageTweenList[i]);
+                }
             }
         }
     }
 
+}
+
+public class UIInfo
+{
+    public bool show;
+    public Image imageTween;
+    public bool ifLoadNext;
+    public float percent;
+    public float lerSpeed;
 }

@@ -36,6 +36,10 @@ public class GameManager : MonoBehaviour
             {
                 loadType =3,eventID=3
             },
+            new ScriptData()//test 进场
+            {
+                loadType =3,eventID=5,name="Test",characterPos=2,eventData=1
+            },
             new ScriptData()
             {
                 loadType =2,name="Test",dialogueContent = "222222222222222",characterPos=2,soundType=1,soundPath = "0",energyValue = 50
@@ -55,6 +59,10 @@ public class GameManager : MonoBehaviour
             new ScriptData()
             {
                  loadType =1,spriteName ="Title",soundType=3,soundPath = "Normal"
+            },
+            new ScriptData()//debug 进场
+            {
+                loadType =3,eventID=5,name="Debug",characterPos=1,eventData=1,characterID=1,
             },
             new ScriptData()
             {
@@ -105,10 +113,14 @@ public class GameManager : MonoBehaviour
             {
                 loadType =3,eventID=2,eventData=1,
             },
+            new ScriptData()//test退场
+            {
+                loadType =3,eventID=5,name="Test",characterPos=2,scriptID=4
+            },
             new ScriptData()
             {
                 loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "4",ifRotate=true,characterID=1,
-                dialogueContent = "那么我们要开始了",scriptID=4,
+                dialogueContent = "那么我们要开始了"
             },
             new ScriptData()
             {
@@ -144,6 +156,10 @@ public class GameManager : MonoBehaviour
             {
                 loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "7",ifRotate=true,characterID=1,
                 dialogueContent = "在下告退",scriptID=7,
+            },
+            new ScriptData()//debug退场
+            {
+                loadType =3,eventID=5,name="Debug",characterPos=1,ifRotate=true,characterID=1,
             },
             new ScriptData()
             {
@@ -214,7 +230,11 @@ public class GameManager : MonoBehaviour
                 case 4:
                     eventDict[scriptDatas[scriptIndex].eventData](null);
                     break;
-
+                case 5:
+                    ShowOrHideCharacterMask(System.Convert.ToBoolean(scriptDatas[scriptIndex].eventData)
+                        ,scriptDatas[scriptIndex].characterID);
+                    HandleCharacter(true);
+                    break;
 
                 default:
                     break;
@@ -345,16 +365,21 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 处理人物相关内容
     /// </summary>
-    public void HandleCharacter()
+    public void HandleCharacter(bool showCharacterOnly=false)
     {
         //显示人物
         ShowCharacter(scriptDatas[scriptIndex].name, scriptDatas[scriptIndex].characterID);
-        //更新对话框
-        UpdateTalkLineText(scriptDatas[scriptIndex].dialogueContent);
+
         //设置人物位置
         SetCharacterPos(scriptDatas[scriptIndex].characterPos, scriptDatas[scriptIndex].ifRotate, scriptDatas[scriptIndex].characterID);
-        ChangeEnergyValue(scriptDatas[scriptIndex].energyValue);
-        ChangeFavourValue(scriptDatas[scriptIndex].favorability, scriptDatas[scriptIndex].name);
+        if (!showCharacterOnly)
+        {
+            //更新对话框
+            UpdateTalkLineText(scriptDatas[scriptIndex].dialogueContent);
+            ChangeEnergyValue(scriptDatas[scriptIndex].energyValue);
+            ChangeFavourValue(scriptDatas[scriptIndex].favorability, scriptDatas[scriptIndex].name);
+        }
+
     }
     /// <summary>
     /// 显示多选项对话框
@@ -410,5 +435,17 @@ public class GameManager : MonoBehaviour
     public void ShowOrHideMask(bool show)
     {
         UIManager.Get.ShowOrHideMask(show);
+    }
+    public void ShowOrHideCharacterMask(bool show, int characterID)
+    {
+        UIManager.Get.ShowOrHideCharacterMask(show, characterID);
+    }/// <summary>
+     /// 执行ui渐隐渐现的动画
+     /// </summary>
+     /// <param name="show"></param>
+     /// <param name="image"></param>
+    public void DoShowOrHideUITween(bool show,bool ifLoadNext,float interval ,params UnityEngine.UI.Image[] images)
+    {
+        UIManager.Get.DoShowOrHideUITween(show,ifLoadNext, interval, images);
     }
 }

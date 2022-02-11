@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class HitpointGame : MonoBehaviour
 {
     private bool gamestart;
@@ -9,6 +9,7 @@ public class HitpointGame : MonoBehaviour
     private float timeVal;
     public GameObject[] points;
     public int hitnum;
+    private Image[] imgpoints;
     // Start is called before the first frame update
     void Start()
     {
@@ -56,7 +57,16 @@ public class HitpointGame : MonoBehaviour
         {
             points[i].SetActive(false);
         }
-        points[Random.Range(0, points.Length)].SetActive(true);
+        GameObject point = points[Random.Range(0, points.Length)];
+        point.SetActive(true);
+        Image[] images = point.GetComponentsInChildren<Image>();
+        for (int i = 0; i < images.Length; i++)
+        {
+            images[i].color = new Color(images[i].color.r,
+                images[i].color.g,
+                images[i].color.b,0);
+        }
+        GameManager.Get.DoShowOrHideUITween(true, false,2,images);
     }
     public void HitPoint(GameObject obj)
     {
