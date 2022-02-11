@@ -12,7 +12,7 @@ public class ScriptData
     public string spriteName;//资源
     public string dialogueContent;//对话内容
     public int characterPos;//1.左 2.右 3.中
-    public bool ifRotate;//s是否翻转
+    public bool ifRotate;//是否翻转
     public int soundType;//音频类型1.对话 2.音效 3.音乐
     public string soundPath;//音频路径
     public int favorability;//好感度（改变值）
