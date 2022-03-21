@@ -231,9 +231,13 @@ public class GameManager : MonoBehaviour
                     eventDict[scriptDatas[scriptIndex].eventData](null);
                     break;
                 case 5:
-                    ShowOrHideCharacterMask(System.Convert.ToBoolean(scriptDatas[scriptIndex].eventData)
-                        ,scriptDatas[scriptIndex].characterID);
-                    HandleCharacter(true);
+                    //ShowOrHideCharacterMask(System.Convert.ToBoolean(scriptDatas[scriptIndex].eventData)
+                    //    , scriptDatas[scriptIndex].characterID);
+                    //图片
+                    DoShowOrHideCharacterTween(System.Convert.ToBoolean(scriptDatas[scriptIndex].eventData)
+                        , true, 1, scriptDatas[scriptIndex].name, scriptDatas[scriptIndex].characterPos);
+                    //HandleCharacter(true);
+                    ShowCharacter(scriptDatas[scriptIndex].name);
                     break;
 
                 default:
@@ -258,17 +262,22 @@ public class GameManager : MonoBehaviour
     //显示人物
     private void ShowCharacter(string name, int characterID = 0)
     {
-        UIManager.Get.ShowCharacter(name, characterID);
+        //UIManager.Get.ShowCharacter(name, characterID);
+        CubismManager.Get.ShowCharacter(name);
+
+
+
     }
     //更新对话框
     private void UpdateTalkLineText(string dialogueContent)
     {
         UIManager.Instance.UpdateTalkLineText(dialogueContent);
     }
-
-    public void SetCharacterPos(int posID, bool ifRotate = false, int characterID = 0)
+    //设置人物位置
+    public void SetCharacterPos(int posID, string name)
     {
-        UIManager.Instance.SetCharacterPos(posID, ifRotate, characterID);
+        //UIManager.Instance.SetCharacterPos(posID, ifRotate, characterID);
+        CubismManager.Get.SetCharacterPos(posID,name);
     }
     /// <summary>
     /// 播放音效
@@ -282,6 +291,7 @@ public class GameManager : MonoBehaviour
                 AudioSouceManager.Instance.PlayDialogue(
                     scriptDatas[scriptIndex].name + "/" + scriptDatas[scriptIndex].soundPath
                     );
+                CubismManager.Get.Talk(scriptDatas[scriptIndex].name);
                 break;
             case 2:
                 AudioSouceManager.Instance.PlaySound(
@@ -368,10 +378,10 @@ public class GameManager : MonoBehaviour
     public void HandleCharacter(bool showCharacterOnly=false)
     {
         //显示人物
-        ShowCharacter(scriptDatas[scriptIndex].name, scriptDatas[scriptIndex].characterID);
+        ShowCharacter(scriptDatas[scriptIndex].name);
 
         //设置人物位置
-        SetCharacterPos(scriptDatas[scriptIndex].characterPos, scriptDatas[scriptIndex].ifRotate, scriptDatas[scriptIndex].characterID);
+        SetCharacterPos(scriptDatas[scriptIndex].characterPos, scriptDatas[scriptIndex].name);
         if (!showCharacterOnly)
         {
             //更新对话框
@@ -436,10 +446,13 @@ public class GameManager : MonoBehaviour
     {
         UIManager.Get.ShowOrHideMask(show);
     }
-    public void ShowOrHideCharacterMask(bool show, int characterID)
-    {
-        UIManager.Get.ShowOrHideCharacterMask(show, characterID);
-    }/// <summary>
+    //public void ShowOrHideCharacterMask(bool show, int characterID)
+    //{
+    //    UIManager.Get.ShowOrHideCharacterMask(show, characterID);
+    //}
+
+
+     /// <summary>
      /// 执行ui渐隐渐现的动画
      /// </summary>
      /// <param name="show"></param>
@@ -447,5 +460,15 @@ public class GameManager : MonoBehaviour
     public void DoShowOrHideUITween(bool show,bool ifLoadNext,float interval ,params UnityEngine.UI.Image[] images)
     {
         UIManager.Get.DoShowOrHideUITween(show,ifLoadNext, interval, images);
+    }
+
+    /// <summary>
+    /// 人物进退场动画
+    /// </summary>
+    public void DoShowOrHideCharacterTween(bool show, bool ifLoadNext, float interval, string name,int posID)
+    {
+        CubismManager.Get.DoShowOrHideCharacterTween(show, ifLoadNext, interval,  name, posID);
+        UIManager.Get.ShowORHideTalkLine(false);
+        UIManager.Get.CloseChoiceUI();
     }
 }

@@ -155,9 +155,11 @@ public class UIManager : MonoBehaviour
     /// <param name="show"></param>
     public void ShowORHideTalkLine(bool show = true)
     {
+        if (show)
+        {
+            CloseChoiceUI();
+        }
         talkLineGo.SetActive(show);
-
-
     }
     /// <summary>
     /// 显示或隐藏遮罩
@@ -165,7 +167,7 @@ public class UIManager : MonoBehaviour
     /// <param name="show">true显示</param>
     public void ShowOrHideMask(bool show)
     {
-        DoShowOrHideUITween(show, true,5,mask);
+        DoShowOrHideUITween(show, true,2,mask);
 
     }
     /// <summary>
@@ -216,7 +218,7 @@ public class UIManager : MonoBehaviour
         info.percent += info.lerSpeed * Time.deltaTime;
         info.imageTween.color = new Color(info.imageTween.color.r, info.imageTween.color.g, info.imageTween.color.b,
             info.percent);
-        if (info.imageTween.color.a >= 0.95f)
+        if (info.imageTween.color.a >= 0.995f)
         {
             info.imageTween.color = new Color(info.imageTween.color.r, info.imageTween.color.g, info.imageTween.color.b, 1);
             if (info.ifLoadNext)
@@ -236,7 +238,7 @@ public class UIManager : MonoBehaviour
         info.percent -= info.lerSpeed * Time.deltaTime;
         info.imageTween.color = new Color(info.imageTween.color.r, info.imageTween.color.g, info.imageTween.color.b,
             info.percent);
-        if (info.imageTween.color.a <= 0.05f)
+        if (info.imageTween.color.a <= 0.005f)
         {
             info.imageTween.color = new Color(info.imageTween.color.r, info.imageTween.color.g, info.imageTween.color.b, 0);
 
