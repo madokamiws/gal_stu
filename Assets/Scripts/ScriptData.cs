@@ -21,9 +21,12 @@ public class ScriptData
     //处理事件id
     public int eventID;//1.显示选择项 2 跳转到指定剧本位置 3.显示隐藏遮罩 4.特殊事件 5.显示或影藏人物
     //事件选项数据：
-    //1  eventID为1时代表几个选择项  2  eventID为2时代表具体要跳转到的标记位 3.0隐藏1显示遮罩 4.eventID为3时代表事件ID 5.0是退场1是进场
+    //1  eventID为1时代表几个选择项  2  eventID为2时代表具体要跳转到的标记位 3.0隐藏1显示遮罩 4.eventID为4时代表事件ID 5.0是退场1是进场
     public int eventData;
     //剧本用于标记位，用于跳转
     public int scriptID;
     public int scriptIndex;//剧本索引
+    public int animationNum;//播放人物需要播放动作的编号
+    public int expressionIndex;//当前人物需要播放的表情标号
+
 }

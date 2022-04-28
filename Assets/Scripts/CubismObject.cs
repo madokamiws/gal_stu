@@ -11,6 +11,7 @@ public class CubismObject : MonoBehaviour
     private CubismAudioMouthInput cubismAudioMouthInput;
     private CubismExpressionController cubismexpressionController;
     private Animator animator;
+    private CubismMouthController cubismMouthController;
     // Start is called before the first frame update
     void Awake()
     {
@@ -18,6 +19,7 @@ public class CubismObject : MonoBehaviour
         cubismAudioMouthInput = transform.GetChild(0).GetComponent<CubismAudioMouthInput>();
         cubismexpressionController = transform.GetChild(0).GetComponent<CubismExpressionController>();
         animator = transform.GetChild(0).GetComponent<Animator>();
+        cubismMouthController = transform.GetChild(0).GetComponent<CubismMouthController>();
         //animator.enabled = false;
     }
 
@@ -38,11 +40,12 @@ public class CubismObject : MonoBehaviour
     {
         if (isTalking)
         {
-            cubismAudioMouthInput.AudioInput = AudioSouceManager.Get.dialogueAudio;
+            cubismAudioMouthInput.AudioInput = GameManager.Get.GetDialogueAudio();
         }
         else
         {
             cubismAudioMouthInput.AudioInput = null;
+            cubismMouthController.MouthOpening = 0;
         }
     }
     public void PlayExpression(int index)
@@ -53,4 +56,9 @@ public class CubismObject : MonoBehaviour
     {
         animator.enabled = enabledValue;
     }
+    public void PlayMotion(int animationNum)
+    {
+        animator.SetTrigger(animationNum.ToString());
+    }
+
 }

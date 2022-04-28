@@ -9,7 +9,6 @@ public class HitpointGame : MonoBehaviour
     private float timeVal;
     public GameObject[] points;
     public int hitnum;
-    private Image[] imgpoints;
     // Start is called before the first frame update
     void Start()
     {
@@ -70,6 +69,7 @@ public class HitpointGame : MonoBehaviour
     }
     public void HitPoint(GameObject obj)
     {
+        GameManager.Get.PlayGameSound("Hit", SOUNDTPPE.SOUND);
         hitnum++;
         obj.SetActive(false);
     }

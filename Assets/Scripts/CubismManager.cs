@@ -54,9 +54,16 @@ public class CubismManager : MonoBehaviour
             }
         }
     }
-
+    /// <summary>
+    /// 显示人物加载模型
+    /// </summary>
+    /// <param name="name"></param>
     public void ShowCharacter(string name)
     {
+        if (name == null)
+        {
+            return;
+        }
         if (characterDict.ContainsKey(name))
         {
             characterDict[name].gameObject.SetActive(true);
@@ -75,6 +82,10 @@ public class CubismManager : MonoBehaviour
     /// <param name="name"></param>
     public void SetCharacterPos(int posID,string name)
     {
+        if (name == null)
+        {
+            return;
+        }
         if (characterDict.ContainsKey(name))
         {
             characterDict[name].transform.SetParent(characterPos[posID-1]);
@@ -85,9 +96,9 @@ public class CubismManager : MonoBehaviour
     /// <summary>
     /// 人物进退场动画
     /// </summary>
-    /// <param name="show"></param>
-    /// <param name="ifLoadNext"></param>
-    /// <param name="interval"></param>
+    /// <param name="show"></param>是否显示
+    /// <param name="ifLoadNext"></param>是否加载加个剧本
+    /// <param name="interval"></param>间隔时间
     /// <param name="cubismObject"></param>
     public void DoShowOrHideCharacterTween(bool show,bool ifLoadNext,float interval, string name,int posID)
     {
@@ -143,6 +154,10 @@ public class CubismManager : MonoBehaviour
     /// <param name="characterInfo"></param>
     public void ShowCharacter(CharacterInfo characterInfo)
     {
+        if (name == null)
+        {
+            return;
+        }
         characterInfo.percent += characterInfo.lerpSpeed * Time.deltaTime;
         characterInfo.cubismObject.SetOpacityValue(characterInfo.percent);
         if (characterInfo.cubismObject.GetOpacityValue()>=0.995f)
@@ -188,12 +203,47 @@ public class CubismManager : MonoBehaviour
     /// <param name="name"></param>
     public void Talk(string name)
     {
+        if (!currentCharacteDict.ContainsKey(name))
+        {
+            return;
+        }
         foreach (var item in currentCharacteDict)
         {
             item.Value.Talk(false);
         }
         currentCharacteDict[name].Talk(true);
     }
+    /// <summary>
+    /// 播放动作
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="animationNum"></param>
+    public void PlayMotion(string name,int animationNum)
+    {
+
+        foreach (var item in currentCharacteDict)
+        {
+            if (item.Key != name)
+            {
+                item.Value.PlayMotion(0);
+            }
+            else
+            {
+                currentCharacteDict[name].PlayMotion(animationNum);
+            }
+        }
+
+    }
+    /// <summary>
+    /// 表情
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="index"></param>
+    public void PlayExpression(string name, int index)
+    {
+        currentCharacteDict[name].PlayExpression(index);
+    }
+
 }
 public class CharacterInfo
 {

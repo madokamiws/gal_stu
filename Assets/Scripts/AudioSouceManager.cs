@@ -63,5 +63,39 @@ public class AudioSouceManager : MonoBehaviour
     {
         dialogueAudio.Stop();
     }
+    public void PlayGameSound(string soundPath, SOUNDTPPE soundtype = SOUNDTPPE.DIALOGUE, string name = null)
+    {
+        switch (soundtype)
+        {
+            case SOUNDTPPE.DIALOGUE:
+                if (name != null)
+                {
+                    soundPath = name + "/" + soundPath;
+                    GameManager.Get.CharacterTalk(name);
+                }
+                PlayDialogue(soundPath);
 
+                break;
+            case SOUNDTPPE.SOUND:
+                PlaySound(soundPath);
+                break;
+            case SOUNDTPPE.MUSIC:
+                PlayMusic(soundPath);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public AudioSource GetDialogueAudio()
+    {
+        return dialogueAudio;
+    }
+
+}
+public enum SOUNDTPPE
+{
+    DIALOGUE,
+    SOUND,
+    MUSIC
 }
