@@ -289,6 +289,9 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/16.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
+    <Reference Include="LitJson">
+      <HintPath>E:/workspace/gal_stu/gal/gal_stu/Assets/Plugins/LitJson.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>E:/workspace/gal_stu/gal/gal_stu/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>
     </Reference>

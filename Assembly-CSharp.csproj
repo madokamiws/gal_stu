@@ -396,6 +396,9 @@
     <Reference Include="UnityEditor">
       <HintPath>E:/workspace/editor/2019.4.8f1/Editor/Data/Managed/UnityEditor.dll</HintPath>
     </Reference>
+    <Reference Include="LitJson">
+      <HintPath>E:/workspace/gal_stu/gal/gal_stu/Assets/Plugins/LitJson.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib">
       <HintPath>E:/workspace/editor/2019.4.8f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
     </Reference>

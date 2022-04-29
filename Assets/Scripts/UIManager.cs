@@ -56,17 +56,23 @@ public class UIManager : MonoBehaviour
     {
         Instance = this;
         imageTweenList = new List<UIInfo>();
-        itemInfos = new List<ItemInfo>()
-        {
-            new ItemInfo(){name = "冰棍",id = 1,instruction = "123123123" ,src = 10},
-            new ItemInfo(){name = "kuma",id = 2,instruction = "akumanochikara",src = 15 },
-        };
+        //itemInfos = new List<ItemInfo>()
+        //{
+        //    new ItemInfo(){name = "冰棍",id = 1,instruction = "123123123" ,src = 10},
+        //    new ItemInfo(){name = "kuma",id = 2,instruction = "akumanochikara",src = 15 },
+        //};
+
+        //AddItem(itemInfos[1]);
+    }
+    private void Start()
+    {
+        //GameManager.Get.SaveByJson<List<ItemInfo>>(itemInfos, "/Json/ItemInfo.json");
+        itemInfos = GameManager.Get.LoadByJson<List<ItemInfo>>("/Json/ItemInfo.json");
         itemBtnGosDict = new Dictionary<int, GameObject>();
         for (int i = 0; i < itemInfos.Count; i++)
         {
             AddItem(itemInfos[i]);
         }
-        //AddItem(itemInfos[1]);
     }
 
     /// <summary>

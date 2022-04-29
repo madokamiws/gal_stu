@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using LitJson;
+using System.IO;
 
 public class GameManager : MonoBehaviour
 {
@@ -48,170 +50,196 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void InitScriptsDataList()
     {
-        ScriptDatasList = new List<ScriptData>()
-        {
-            new ScriptData()
-            {
-                 loadType =1,spriteName ="Title",soundType=3,soundPath = "Daily"
-            },
-            new ScriptData()
-            {
-                loadType =3,eventID=3
-            },
-            //new ScriptData()//test 进场
-            //{
-            //    loadType =3,eventID=5,name="Test",characterPos=2,eventData=1
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =2,name="Test",dialogueContent = "222222222222222",characterPos=2,soundType=1,soundPath = "0",energyValue = 10
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =2,name="Test",dialogueContent = "333333333333333",characterPos=1,ifRotate = true,soundType=1,soundPath = "1",favorability=5,animationNum = 1
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =2,name="Test",dialogueContent = "4444444444444444444",characterPos=3,soundType=1,soundPath = "2"
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =2,name="Test",dialogueContent = "666666666666666",characterPos=2,soundType=1,soundPath = "3",energyValue=-5,animationNum = 2
-            //},
-            //new ScriptData()
-            //{
-            //     loadType =1,spriteName ="Title",soundType=3,soundPath = "Normal"
-            //},
-            //new ScriptData()//debug 进场
-            //{
-            //    loadType =3,eventID=5,name="Debug",characterPos=1,eventData=1,characterID=1,
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "0",ifRotate=true,characterID=1,
-            //    dialogueContent = "你好，我是debug",animationNum = 3
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =2,name="Test",characterPos=2,soundType=1,soundPath = "6",
-            //    dialogueContent = "你好，我是debug",
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "1",ifRotate=true,characterID=1,
-            //    dialogueContent = "基建",energyValue=-50, expressionIndex = 4
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =3,eventID=1,eventData=3,scriptID=1
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =3,eventID=2,eventData=2,dialogueContent = "选项一剧情",
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =3,eventID=2,eventData=3,dialogueContent = "选项二剧情",
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =3,eventID=2,eventData=4,dialogueContent = "选项三剧情",
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "2",ifRotate=true,characterID=1,
-            //    dialogueContent = "一选项触发的事件",scriptID=2, expressionIndex = 1
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =3,eventID=2,eventData=1,
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "3",ifRotate=true,characterID=1,
-            //    dialogueContent = "二选项触发的事件",scriptID=3,
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =3,eventID=2,eventData=1,
-            //},
-            //new ScriptData()//test退场
-            //{
-            //    loadType =3,eventID=5,name="Test",characterPos=2,scriptID=4
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "4",ifRotate=true,characterID=1,
-            //    dialogueContent = "那么我们要开始了",animationNum = 1,expressionIndex = 1
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =3,eventID=4,eventData=1,
-            //},
-            //new ScriptData()//失败时需要跳转的事件剧情位置
-            //{
-            //    loadType =3,eventID=2,eventData=5,
-            //},
-            //new ScriptData()//胜利时需要跳转的事件剧情位置
-            //{
-            //    loadType =3,eventID=2,eventData=6,
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "5",ifRotate=true,characterID=1,
-            //    dialogueContent = "游戏失败",scriptID=5,expressionIndex = 6
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =3,eventID=2,eventData=7,
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "6",ifRotate=true,characterID=1,
-            //    dialogueContent = "游戏成功",scriptID=6,animationNum = 2,expressionIndex = 4
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =3,eventID=2,eventData=7,
-            //},
-            //new ScriptData()
-            //{
-            //    loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "7",ifRotate=true,characterID=1,
-            //    dialogueContent = "在下告退",scriptID=7,
-            //},
-            //new ScriptData()//debug退场
-            //{
-            //    loadType =3,eventID=5,name="Debug",characterPos=1,ifRotate=true,characterID=1,
-            //},
-            new ScriptData()
-            {
-                loadType =2,dialogueContent = "接下来我想去找"
-            },
-            new ScriptData()
-            {
-                loadType =3,eventID=4,eventData=2,
-            },
-            new ScriptData()
-            {
-                loadType =3,eventID=3,eventData=1,
-            },
-        };
+        //ScriptDatasList = new List<ScriptData>()
+        //{
+        //    new ScriptData()
+        //    {
+        //         loadType =1,spriteName ="Title",soundType=3,soundPath = "Daily"
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =3,eventID=3
+        //    },
+        //    new ScriptData()//test 进场
+        //    {
+        //        loadType =3,eventID=5,name="Test",characterPos=2,eventData=1
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =2,name="Test",dialogueContent = "222222222222222",characterPos=2,soundType=1,soundPath = "0",energyValue = 10
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =2,name="Test",dialogueContent = "333333333333333",characterPos=1,ifRotate = true,soundType=1,soundPath = "1",favorability=5,animationNum = 1
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =2,name="Test",dialogueContent = "4444444444444444444",characterPos=3,soundType=1,soundPath = "2"
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =2,name="Test",dialogueContent = "666666666666666",characterPos=2,soundType=1,soundPath = "3",energyValue=-5,animationNum = 2
+        //    },
+        //    new ScriptData()
+        //    {
+        //         loadType =1,spriteName ="Title",soundType=3,soundPath = "Normal"
+        //    },
+        //    new ScriptData()//debug 进场
+        //    {
+        //        loadType =3,eventID=5,name="Debug",characterPos=1,eventData=1,characterID=1,
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "0",ifRotate=true,characterID=1,
+        //        dialogueContent = "你好，我是debug",animationNum = 3
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =2,name="Test",characterPos=2,soundType=1,soundPath = "6",
+        //        dialogueContent = "你好，我是debug",
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "1",ifRotate=true,characterID=1,
+        //        dialogueContent = "基建",energyValue=-50, expressionIndex = 4
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =3,eventID=1,eventData=3,scriptID=1
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =3,eventID=2,eventData=2,dialogueContent = "选项一剧情",
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =3,eventID=2,eventData=3,dialogueContent = "选项二剧情",
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =3,eventID=2,eventData=4,dialogueContent = "选项三剧情",
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "2",ifRotate=true,characterID=1,
+        //        dialogueContent = "一选项触发的事件",scriptID=2, expressionIndex = 1
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =3,eventID=2,eventData=1,
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "3",ifRotate=true,characterID=1,
+        //        dialogueContent = "二选项触发的事件",scriptID=3,
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =3,eventID=2,eventData=1,
+        //    },
+        //    new ScriptData()//test退场
+        //    {
+        //        loadType =3,eventID=5,name="Test",characterPos=2,scriptID=4
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "4",ifRotate=true,characterID=1,
+        //        dialogueContent = "那么我们要开始了",animationNum = 1,expressionIndex = 1
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =3,eventID=4,eventData=1,
+        //    },
+        //    new ScriptData()//失败时需要跳转的事件剧情位置
+        //    {
+        //        loadType =3,eventID=2,eventData=5,
+        //    },
+        //    new ScriptData()//胜利时需要跳转的事件剧情位置
+        //    {
+        //        loadType =3,eventID=2,eventData=6,
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "5",ifRotate=true,characterID=1,
+        //        dialogueContent = "游戏失败",scriptID=5,expressionIndex = 6
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =3,eventID=2,eventData=7,
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "6",ifRotate=true,characterID=1,
+        //        dialogueContent = "游戏成功",scriptID=6,animationNum = 2,expressionIndex = 4
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =3,eventID=2,eventData=7,
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =2,name="Debug",characterPos=1,soundType=1,soundPath = "7",ifRotate=true,characterID=1,
+        //        dialogueContent = "在下告退",scriptID=7,
+        //    },
+        //    new ScriptData()//debug退场
+        //    {
+        //        loadType =3,eventID=5,name="Debug",characterPos=1,ifRotate=true,characterID=1,
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =2,dialogueContent = "接下来我想去找"
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =3,eventID=4,eventData=2,
+        //    },
+        //    new ScriptData()
+        //    {
+        //        loadType =3,eventID=3,eventData=1,
+        //    },
+        //};
+        ScriptDatasList = LoadByJson<List<ScriptData>>("/Json/ScriptDatas_test.json");
         for (int i = 0; i < ScriptDatasList.Count; i++)
         {
             ScriptDatasList[i].scriptIndex = i;
         }
+        //SaveByJson(ScriptDatasList, "/Json/ScriptDatas1.json");
     }
     /// <summary>
     /// 读取json信息文件
     /// </summary>
-    private void LoadByJson()
-    { 
-    
+    public T LoadByJson<T>(string path)
+    {
+        T targetObj = default;
+        string filePath = Application.streamingAssetsPath + path;
+        if (File.Exists(filePath))
+        {
+            StreamReader sr = new StreamReader(filePath);
+             string jsonStr = sr.ReadToEnd();
+            sr.Close();
+            targetObj =  JsonMapper.ToObject<T>(jsonStr);
+        }
+        if (targetObj == null)
+        {
+            Debug.Log("读取json信息失败");
+        }
+        else
+        {
+            Debug.Log("读取json信息成功");
+        }
+        return targetObj;
+
     }
 
-    private void SaveByJson()
-    { 
-    
+    public void SaveByJson<T>(T targetObj,string path)
+    {
+        string filePath = Application.streamingAssetsPath + path;
+        string saveJsonStr = JsonMapper.ToJson(targetObj);
+        StreamWriter sw = new StreamWriter(filePath);
+        sw.Write(saveJsonStr);
+        sw.Close();
+        Debug.Log("剧本保存完成");
+        
     }
     #endregion
 

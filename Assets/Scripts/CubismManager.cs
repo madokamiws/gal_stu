@@ -60,7 +60,7 @@ public class CubismManager : MonoBehaviour
     /// <param name="name"></param>
     public void ShowCharacter(string name)
     {
-        if (name == null)
+        if (name == null || name == "")
         {
             return;
         }
@@ -82,7 +82,7 @@ public class CubismManager : MonoBehaviour
     /// <param name="name"></param>
     public void SetCharacterPos(int posID,string name)
     {
-        if (name == null)
+        if (name == null || name == "")
         {
             return;
         }
@@ -106,6 +106,10 @@ public class CubismManager : MonoBehaviour
     }
     private IEnumerator DoShowOrHideCharacter(bool show, bool ifLoadNext, float interval, string name,int posID)
     {
+        if (name == null || name == "")
+        {
+            yield break;
+        }
         float percent;
         CubismObject cubismObject;
         if (characterDict.ContainsKey(name))

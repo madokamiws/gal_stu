@@ -23,6 +23,22 @@ public class FreeActivities : MonoBehaviour
             { 2,ChooseDebug},
             { 3,FinshActivity}
         };
+        //string[] testStrs = new string[]
+        //        {
+        //            "你来找我有什么事？",
+        //            "你是个xxxx",
+        //            "谢谢大佬",
+        //            "12312312312",
+        //            "222222222"
+        //        };
+        //string[] debugStrs = new string[]
+        //{
+        //            "阁下找我有什么事？",
+        //            "阁下击剑很棒",
+        //            "谢谢",
+        //            "击剑把",
+        //            "222222222"
+        //};
         //ShowChoiceUI();
         actActions = new Dictionary<int, System.Action>()
         {
@@ -33,26 +49,11 @@ public class FreeActivities : MonoBehaviour
         };
         characterDialogue = new Dictionary<string, string[]>()
         {
-            {"Test",new string[]
-                {
-                    "你来找我有什么事？",
-                    "你是个xxxx",
-                    "谢谢大佬",
-                    "12312312312",
-                    "222222222"
-                }
-            },
-            {"Debug",new string[]
-                {
-                    "阁下找我有什么事？",
-                    "阁下击剑很棒",
-                    "谢谢",
-                    "击剑把",
-                    "222222222"
-                }
-            }
+            {"Test",GameManager.Get.LoadByJson<string[]>("/Json/SingleDialogue/Test.json")},
+            {"Debug",GameManager.Get.LoadByJson<string[]>("/Json/SingleDialogue/Debug.json")}
         };
-
+        //GameManager.Get.SaveByJson<string[]>(testStrs, "/Json/SingleDialogue/Test.json");
+        //GameManager.Get.SaveByJson<string[]>(debugStrs, "/Json/SingleDialogue/Debug.json");
     }
 
     // Update is called once per frame
